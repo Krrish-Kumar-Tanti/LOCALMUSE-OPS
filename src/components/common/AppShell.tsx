@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { AppSidebar } from "./AppSidebar";
 import { AppHeader } from "./AppHeader";
@@ -27,18 +28,29 @@ function AppShellInner({
   description,
   className
 }: Omit<AppShellProps, "mode" | "onToggleMode">) {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { mode, toggleMode } = useOperationMode();
   const { health, isLiveAvailable, isMcpConnected } = useBackendHealth({ autoFetch: true });
 
   const isBackendOnline = health?.status === "online";
 
+  const handleSelectNav = (id: string) => {
+    if (onSelectNav) {
+      onSelectNav(id);
+      return;
+    }
+    if (id === "overview") router.push("/");
+    else if (id === "location-insights") router.push("/location-insights");
+    else if (id === "compare-audiences") router.push("/audience-comparison");
+  };
+
   return (
     <div className="flex h-screen w-full bg-zinc-950 text-zinc-100 overflow-hidden font-sans">
       {/* Desktop Sidebar */}
       <AppSidebar
         activeId={activeNavId}
-        onSelectNav={onSelectNav}
+        onSelectNav={handleSelectNav}
         mode={mode}
         isLiveAvailable={isLiveAvailable}
         className="hidden md:flex"
@@ -62,7 +74,7 @@ function AppShellInner({
         <AppSidebar
           activeId={activeNavId}
           onSelectNav={(id) => {
-            onSelectNav?.(id);
+            handleSelectNav(id);
             setMobileMenuOpen(false);
           }}
           mode={mode}

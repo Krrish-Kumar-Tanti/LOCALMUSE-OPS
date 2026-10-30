@@ -9,23 +9,44 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
 import { APP_CONFIG } from "@/constants";
 import { LocationInsightsView } from "@/components/location-insights/LocationInsightsView";
+import { AudienceComparisonView } from "@/components/audience-comparison/AudienceComparisonView";
 
 export default function Home() {
   const [activeNav, setActiveNav] = useState("overview");
+
+  const getShellTitle = () => {
+    switch (activeNav) {
+      case "location-insights":
+        return "Location Insights";
+      case "compare-audiences":
+        return "Audience Comparison";
+      default:
+        return "Cultural Intelligence Workbench";
+    }
+  };
+
+  const getShellDescription = () => {
+    switch (activeNav) {
+      case "location-insights":
+        return "Taste-powered peer anchors and cultural concept indexing for local enterprises";
+      case "compare-audiences":
+        return "Cross-market taste contrast, shared passions, and distinguishing lifestyle traits";
+      default:
+        return "Taste-powered operations and local market intelligence for independent enterprises";
+    }
+  };
 
   return (
     <AppShell
       activeNavId={activeNav}
       onSelectNav={setActiveNav}
-      title={activeNav === "location-insights" ? "Location Insights" : "Cultural Intelligence Workbench"}
-      description={
-        activeNav === "location-insights"
-          ? "Taste-powered peer anchors and cultural concept indexing for local enterprises"
-          : "Taste-powered operations and local market intelligence for independent enterprises"
-      }
+      title={getShellTitle()}
+      description={getShellDescription()}
     >
       {activeNav === "location-insights" ? (
         <LocationInsightsView />
+      ) : activeNav === "compare-audiences" ? (
+        <AudienceComparisonView />
       ) : (
         <div className="max-w-6xl mx-auto space-y-8 pb-12">
           {/* Top Hero / Platform Introduction */}
@@ -135,12 +156,12 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              {/* Workflow 2: Audience Comparison */}
-              <Card className="hover:border-zinc-700/80 transition-colors">
+              {/* Workflow 2: Audience Comparison (Interactive & Live) */}
+              <Card className="hover:border-zinc-700/80 transition-colors border-indigo-500/30 bg-zinc-900/70">
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <Badge variant="neutral" size="sm">Module 02</Badge>
-                    <span className="text-[11px] font-mono text-zinc-400">qloo_compare_audiences</span>
+                    <Badge variant="info" size="sm">Module 02 &bull; Active</Badge>
+                    <span className="text-[11px] font-mono text-indigo-400">qloo_compare_audiences</span>
                   </div>
                   <CardTitle className="pt-1">Audience Comparison</CardTitle>
                   <CardDescription>
@@ -156,6 +177,16 @@ export default function Home() {
                     <p className="text-[11px] text-zinc-400">
                       describe (type: locality) &rarr; compare_audiences (group_a vs group_b)
                     </p>
+                  </div>
+                  <div className="pt-1">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setActiveNav("compare-audiences")}
+                      className="w-full sm:w-auto"
+                    >
+                      Open Audience Comparison &rarr;
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

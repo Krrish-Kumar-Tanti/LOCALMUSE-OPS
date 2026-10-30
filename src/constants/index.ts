@@ -30,13 +30,13 @@ export const NAV_ITEMS: NavItem[] = [
   {
     id: "location-insights",
     label: "Location Insights",
-    href: "/#location-insights",
+    href: "/location-insights",
     description: "Cultural anchors, tag prevalence & demographic indexing"
   },
   {
     id: "compare-audiences",
     label: "Audience Comparison",
-    href: "/#compare-audiences",
+    href: "/audience-comparison",
     description: "Cross-market affinity contrast & divergence mapping"
   },
   {
