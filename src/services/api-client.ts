@@ -3,10 +3,12 @@ import type {
   CompareAudiencesRequest,
   LocalTrendsRequest,
   RecommendationsRequest,
+  AgentWeeklyPlanRequest,
   LocationInsightsData,
   AudienceComparisonData,
   LocalTrendsData,
   RecommendationsData,
+  WeeklyCulturalPlanData,
   QlooMcpEnvelope,
   BackendHealthResponse
 } from "@/types";
@@ -166,6 +168,21 @@ export async function fetchRecommendations(
 }
 
 /**
+ * Requests a coordinated weekly cultural operations plan orchestrated across
+ * Location Insights, Audience Comparison, Local Trends, and Tactical Ranking.
+ */
+export async function fetchAgentWeeklyPlan(
+  params: AgentWeeklyPlanRequest,
+  signal?: AbortSignal
+): Promise<QlooMcpEnvelope<WeeklyCulturalPlanData>> {
+  return fetchJson<QlooMcpEnvelope<WeeklyCulturalPlanData>>("/api/agent/weekly-plan", {
+    method: "POST",
+    body: JSON.stringify(params),
+    signal
+  });
+}
+
+/**
  * Client object bundling all API methods for convenient single-import usage.
  */
 export const apiClient = {
@@ -173,5 +190,6 @@ export const apiClient = {
   getLocationInsights: fetchLocationInsights,
   compareAudiences: fetchCompareAudiences,
   getLocalTrends: fetchLocalTrends,
-  getRecommendations: fetchRecommendations
+  getRecommendations: fetchRecommendations,
+  getAgentWeeklyPlan: fetchAgentWeeklyPlan
 };
