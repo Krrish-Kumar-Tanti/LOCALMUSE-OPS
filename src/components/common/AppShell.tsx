@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import { AppSidebar } from "./AppSidebar";
 import { AppHeader } from "./AppHeader";
 import { useBackendHealth } from "@/hooks/useBackendHealth";
-import { useOperationMode } from "@/hooks/useOperationMode";
+import { useOperationMode, OperationModeProvider } from "@/hooks/useOperationMode";
+import type { OperationMode } from "@/types";
 
 export interface AppShellProps {
   children: React.ReactNode;
@@ -13,19 +14,21 @@ export interface AppShellProps {
   onSelectNav?: (id: string) => void;
   title?: string;
   description?: string;
+  mode?: OperationMode;
+  onToggleMode?: () => void;
   className?: string;
 }
 
-export function AppShell({
+function AppShellInner({
   children,
   activeNavId = "overview",
   onSelectNav,
   title,
   description,
   className
-}: AppShellProps) {
+}: Omit<AppShellProps, "mode" | "onToggleMode">) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { mode, toggleMode } = useOperationMode("demo");
+  const { mode, toggleMode } = useOperationMode();
   const { health, isLiveAvailable, isMcpConnected } = useBackendHealth({ autoFetch: true });
 
   const isBackendOnline = health?.status === "online";
@@ -86,5 +89,24 @@ export function AppShell({
         </main>
       </div>
     </div>
+  );
+}
+
+export function AppShell(props: AppShellProps) {
+  return (
+    <OperationModeProvider
+      mode={props.mode}
+      onToggleMode={props.onToggleMode}
+    >
+      <AppShellInner
+        activeNavId={props.activeNavId}
+        onSelectNav={props.onSelectNav}
+        title={props.title}
+        description={props.description}
+        className={props.className}
+      >
+        {props.children}
+      </AppShellInner>
+    </OperationModeProvider>
   );
 }

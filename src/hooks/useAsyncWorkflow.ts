@@ -93,6 +93,7 @@ export function useAsyncWorkflow<T, P extends unknown[]>(
         }
 
         const normalizedError = err instanceof Error ? err : new Error(String(err));
+        setData(null);
         setError(normalizedError);
         setLoading(false);
         return null;
