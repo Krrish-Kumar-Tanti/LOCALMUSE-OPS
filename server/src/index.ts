@@ -10,6 +10,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4000;
+const HOST = process.env.HOST || "0.0.0.0";
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
 
 // Register clean process shutdown hooks for the stdio MCP child process
@@ -68,8 +69,8 @@ app.get("/", (_req, res) => {
 let server: ReturnType<typeof app.listen> | undefined;
 
 if (process.env.NODE_ENV !== "test") {
-  server = app.listen(PORT, () => {
-    console.log(`[LocalMuse Ops Backend] Server listening on port ${PORT}`);
+  server = app.listen(PORT, HOST, () => {
+    console.log(`[LocalMuse Ops Backend] Server listening on ${HOST}:${PORT}`);
     console.log(`[LocalMuse Ops Backend] CORS configured for: ${FRONTEND_ORIGIN}`);
   });
 }
