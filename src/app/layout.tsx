@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Newsreader, Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { APP_CONFIG } from "@/constants";
+import { ThemeProvider } from "@/lib/ThemeContext";
+import { AuthProvider } from "@/lib/AuthContext";
+import { SmoothScrollProvider } from "@/components/common/SmoothScrollProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const serifFont = Newsreader({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+});
+
+const sansFont = Plus_Jakarta_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -14,12 +23,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: APP_CONFIG.name,
-    template: `%s | ${APP_CONFIG.name}`,
-  },
+  title: `${APP_CONFIG.name} — ${APP_CONFIG.tagline}`,
   description: APP_CONFIG.description,
 };
+
+const antiFlashScript = `
+(function() {
+  try {
+    var stored = localStorage.getItem('localmuse_theme') || 'system';
+    var resolved = stored;
+    if (stored === 'system') {
+      resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    if (resolved === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    document.documentElement.setAttribute('data-theme', stored === 'system' ? resolved : stored);
+  } catch (e) {}
+})();
+`;
 
 export default function RootLayout({
   children,
@@ -29,9 +53,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${serifFont.variable} ${sansFont.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: antiFlashScript }} />
+      </head>
+      <body className="min-h-full flex flex-col font-sans bg-background text-text-primary transition-colors duration-200">
+        <ThemeProvider>
+          <AuthProvider>
+            <SmoothScrollProvider>{children}</SmoothScrollProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

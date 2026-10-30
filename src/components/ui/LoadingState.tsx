@@ -7,26 +7,26 @@ export interface LoadingStateProps {
 }
 
 export function LoadingState({
-  message = "Retrieving cultural intelligence...",
+  message = "Loading cultural intelligence data...",
   className
 }: LoadingStateProps) {
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center p-8 sm:p-12 text-center rounded-xl border border-zinc-800/60 bg-zinc-900/30",
+        "flex flex-col items-center justify-center p-8 sm:p-12 text-center rounded-2xl border border-border bg-surface text-text-primary transition-colors",
         className
       )}
     >
       <div className="relative w-8 h-8 mb-4">
-        <div className="absolute inset-0 rounded-full border-2 border-zinc-800" />
-        <div className="absolute inset-0 rounded-full border-2 border-zinc-200 border-t-transparent animate-spin" />
+        <div className="absolute inset-0 rounded-full border-2 border-accent-muted/30" />
+        <div className="absolute inset-0 rounded-full border-2 border-primary border-t-transparent animate-spin" />
       </div>
-      <p className="text-xs sm:text-sm font-medium text-zinc-300">{message}</p>
-      <p className="text-[11px] text-zinc-500 mt-1">Executing Qloo workflow tools</p>
+      <p className="font-serif text-base font-medium text-text-primary">{message}</p>
+      <p className="text-[11px] text-accent-muted font-mono mt-1">Executing Qloo workflow tools</p>
     </div>
   );
 }
 
 export function SkeletonLine({ className }: { className?: string }) {
-  return <div className={cn("h-4 rounded-md bg-zinc-800/60 animate-pulse", className)} />;
+  return <div className={cn("h-4 rounded-md bg-surface-secondary animate-pulse", className)} />;
 }

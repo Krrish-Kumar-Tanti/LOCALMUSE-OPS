@@ -1,26 +1,118 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   Step 12: Centralized Semantic Theme System
+   Light: Classic Latte
+   Dark: Deep Charcoal with Coffee Accents
+   ========================================================================== */
+
+:root,
+[data-theme="light"] {
+  --background: #F5EFE6;
+  --surface: #FFFDF9;
+  --surface-secondary: #E9DDCE;
+  --border: #DCCDBB;
+  --primary: #79543D;
+  --primary-hover: #63432F;
+  --accent-muted: #B99A7C;
+  --text-primary: #38291F;
+  --text-secondary: #796858;
+}
+
+.dark,
+[data-theme="dark"] {
+  --background: #191A19;
+  --surface: #242522;
+  --surface-secondary: #30302B;
+  --border: #414039;
+  --primary: #B58B68;
+  --primary-hover: #C49B78;
+  --accent-muted: #80664F;
+  --text-primary: #F1E8DC;
+  --text-secondary: #BDB2A4;
+}
+
+/* System mode responds dynamically when not explicitly overridden by light theme */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #191A19;
+    --surface: #242522;
+    --surface-secondary: #30302B;
+    --border: #414039;
+    --primary: #B58B68;
+    --primary-hover: #C49B78;
+    --accent-muted: #80664F;
+    --text-primary: #F1E8DC;
+    --text-secondary: #BDB2A4;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-accent-muted: var(--accent-muted);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-serif: var(--font-serif), "Newsreader", "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-sans), "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
 }
 
 body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Centralized Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-muted);
+}
+
+/* Lenis Smooth Scroll CSS */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }

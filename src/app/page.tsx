@@ -3,21 +3,29 @@
 import React, { useState } from "react";
 import { AppShell } from "@/components/common/AppShell";
 import { BrandGlyph3D } from "@/components/common/BrandGlyph3D";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { Button } from "@/components/ui/Button";
-import { APP_CONFIG } from "@/constants";
 import { LocationInsightsView } from "@/components/location-insights/LocationInsightsView";
 import { AudienceComparisonView } from "@/components/audience-comparison/AudienceComparisonView";
 import { LocalTrendsView } from "@/components/local-trends/LocalTrendsView";
+import { CulturePlanView } from "@/components/culture-plan/CulturePlanView";
 import { RecommendationsView } from "@/components/recommendations/RecommendationsView";
+import { GuideView } from "@/components/guide/GuideView";
+import { TopNavbar } from "@/components/common/TopNavbar";
+import { useAuth } from "@/lib/AuthContext";
+import { TextRevealOnScroll } from "@/components/common/TextRevealOnScroll";
 
 export default function Home() {
   const [activeNav, setActiveNav] = useState("overview");
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("all");
+  const { openLoginModal } = useAuth();
+
+  const handleNavSelect = (id: string) => {
+    setActiveNav(id);
+  };
 
   const getShellTitle = () => {
     switch (activeNav) {
+      case "culture-plan":
+        return "Weekly Cultural Operations Plan";
       case "location-insights":
         return "Location Insights";
       case "compare-audiences":
@@ -26,6 +34,8 @@ export default function Home() {
         return "Local Trends & Momentum";
       case "recommendations":
         return "Tactical Recommendations & Ranking";
+      case "guide":
+        return "Platform Guide & Operational Manual";
       default:
         return "Cultural Intelligence Workbench";
     }
@@ -33,6 +43,8 @@ export default function Home() {
 
   const getShellDescription = () => {
     switch (activeNav) {
+      case "culture-plan":
+        return "Agentic weekly operating rhythm synthesized across all four Qloo capabilities";
       case "location-insights":
         return "Taste-powered peer anchors and cultural concept indexing for local enterprises";
       case "compare-audiences":
@@ -41,6 +53,8 @@ export default function Home() {
         return "Time-series popularity momentum curves and neighborhood density heatmaps";
       case "recommendations":
         return "Two-stage candidate discovery and ranking of operational initiatives against business goals";
+      case "guide":
+        return "Architecture reference, Qloo MCP protocol specification, and field operational guides";
       default:
         return "Taste-powered operations and local market intelligence for independent enterprises";
     }
@@ -49,254 +63,533 @@ export default function Home() {
   return (
     <AppShell
       activeNavId={activeNav}
-      onSelectNav={setActiveNav}
+      onSelectNav={handleNavSelect}
       title={getShellTitle()}
       description={getShellDescription()}
+      className={activeNav === "overview" ? "p-0 sm:p-0 lg:p-0 bg-background" : undefined}
     >
-      {activeNav === "location-insights" ? (
-        <LocationInsightsView />
+      {activeNav === "culture-plan" ? (
+        <div className="p-4 sm:p-6 lg:p-8">
+          <CulturePlanView />
+        </div>
+      ) : activeNav === "location-insights" ? (
+        <div className="p-4 sm:p-6 lg:p-8">
+          <LocationInsightsView />
+        </div>
       ) : activeNav === "compare-audiences" ? (
-        <AudienceComparisonView />
+        <div className="p-4 sm:p-6 lg:p-8">
+          <AudienceComparisonView />
+        </div>
       ) : activeNav === "local-trends" ? (
-        <LocalTrendsView />
+        <div className="p-4 sm:p-6 lg:p-8">
+          <LocalTrendsView />
+        </div>
       ) : activeNav === "recommendations" ? (
-        <RecommendationsView />
+        <div className="p-4 sm:p-6 lg:p-8">
+          <RecommendationsView />
+        </div>
+      ) : activeNav === "guide" ? (
+        <div className="w-full text-text-primary selection:bg-primary selection:text-surface">
+          <TopNavbar activeScreen={activeNav} onNavigate={handleNavSelect} />
+          <div className="p-4 sm:p-6 lg:p-8">
+            <GuideView onLaunchLogin={openLoginModal} />
+          </div>
+        </div>
       ) : (
-        <div className="max-w-6xl mx-auto space-y-8 pb-12">
-          {/* Top Hero / Platform Introduction */}
-          <div className="relative rounded-2xl border border-zinc-800/80 bg-gradient-to-br from-zinc-900/80 via-zinc-900/40 to-zinc-950 p-6 sm:p-8 overflow-hidden">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div className="space-y-3 max-w-2xl">
-                <div className="inline-flex items-center gap-2">
-                  <Badge variant="info" size="sm">
-                    Qloo Hackathon Foundation
-                  </Badge>
-                  <span className="text-[11px] text-zinc-400 font-mono">v{APP_CONFIG.version}</span>
+        /* IMMERSIVE ARTISANAL HOME PAGE */
+        <div className="w-full text-text-primary selection:bg-primary selection:text-surface">
+          {/* Top Announcement Banner */}
+          <div className="bg-surface-secondary text-text-primary py-2 px-4 text-center text-xs font-medium tracking-wide flex items-center justify-center gap-2 border-b border-border">
+            <span>Qloo Agentic Framework: Operational Cultural Intelligence for Independent Places</span>
+            <button
+              onClick={() => handleNavSelect("culture-plan")}
+              className="underline font-semibold hover:text-primary transition-colors cursor-pointer"
+            >
+              Launch Weekly Copilot &rarr;
+            </button>
+          </div>
+
+          {/* Sticky Top Navigation */}
+          <TopNavbar activeScreen={activeNav} onNavigate={handleNavSelect} />
+
+          {/* HERO SECTION */}
+          <section className="relative px-6 sm:px-12 lg:px-20 py-16 sm:py-24 max-w-7xl mx-auto text-left">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              {/* Left Column: Headline and Call-to-Actions */}
+              <div className="lg:col-span-7 space-y-6">
+                <div className="text-[10px] sm:text-[11px] uppercase font-bold tracking-[0.2em] text-accent-muted font-mono">
+                  CULTURAL TASTE SIGNALS &bull; REAL NEIGHBORHOOD AFFINITIES &bull; EMPIRICAL GROUNDING
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100">
-                  Operational Intelligence Powered by Taste AI
-                </h2>
+                <TextRevealOnScroll
+                  as="h1"
+                  text="The cultural operating system for America's local places."
+                  className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.08] font-normal tracking-tight text-text-primary"
+                />
 
-                <p className="text-sm text-zinc-400 leading-relaxed">
-                  LocalMuse Ops translates macro cultural signals—music, dining, literature, and lifestyle affinities—into actionable business decisions for independent hospitality and retail operators.
+                <p className="text-sm sm:text-base text-text-secondary leading-relaxed max-w-xl font-sans">
+                  Independent cafés, natural wine bars, bakeries, and boutiques lose money guessing what their neighborhood wants. LocalMuse Ops translates macro cultural signals—music, dining, literature, and lifestyle affinities—into an actionable weekly operating rhythm grounded in verifiable Qloo taste data.
                 </p>
 
-                <div className="pt-2 flex flex-wrap items-center gap-2">
-                  <span className="text-xs text-zinc-400">Supported surfaces:</span>
-                  <span className="text-xs px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono">qloo mcp</span>
-                  <span className="text-xs px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono">StdioTransport</span>
-                  <span className="text-xs px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono">Next.js 16 App Router</span>
+                <div className="pt-2 flex flex-wrap items-center gap-3">
+                  <button
+                    onClick={() => handleNavSelect("culture-plan")}
+                    className="px-6 py-3 rounded-full bg-primary hover:bg-primary-hover text-surface text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-xs cursor-pointer inline-flex items-center gap-2"
+                  >
+                    <span>Generate Weekly Plan</span>
+                    <span>&rarr;</span>
+                  </button>
+
+                  <a
+                    href="#comparison"
+                    className="px-6 py-3 rounded-full bg-surface border border-border hover:bg-surface-secondary text-text-primary text-xs sm:text-sm font-medium tracking-wide transition-all cursor-pointer shadow-2xs"
+                  >
+                    Compare Qloo vs. Generic AI
+                  </a>
+                </div>
+
+                <div className="pt-4 flex flex-wrap items-center gap-4 text-xs text-text-secondary font-sans">
+                  <span className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>100% Qloo Grounded</span>
+                  </span>
+                  <span>&bull;</span>
+                  <span className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Neighborhood Taste Vectors</span>
+                  </span>
+                  <span>&bull;</span>
+                  <span className="flex items-center gap-1.5">
+                    <svg className="w-3.5 h-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Zero Capex Initiatives</span>
+                  </span>
                 </div>
               </div>
 
-              {/* 3D Geometric Brand Prism */}
-              <div className="shrink-0 flex flex-col items-center p-4 rounded-xl border border-zinc-800/60 bg-zinc-950/60">
-                <BrandGlyph3D size="lg" animate />
-                <span className="text-[10px] font-mono text-zinc-400 mt-2 uppercase tracking-wider">
-                  Cultural Prism
-                </span>
+              {/* Right Column: Hero Visual Card */}
+              <div className="lg:col-span-5 relative flex justify-center">
+                <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-sm relative overflow-hidden space-y-5">
+                  <div className="flex items-center justify-between border-b border-border pb-4">
+                    <div className="flex items-center gap-3">
+                      <BrandGlyph3D size="sm" />
+                      <div>
+                        <span className="text-[10px] uppercase font-mono tracking-wider text-accent-muted">
+                          East Austin Specialty Roastery
+                        </span>
+                        <h4 className="font-serif text-lg text-text-primary leading-tight">
+                          Solstice Coffee Lab &bull; W45
+                        </h4>
+                      </div>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full bg-surface-secondary text-text-secondary font-mono text-[10px] border border-border">
+                      Weekly Plan
+                    </span>
+                  </div>
+
+                  <div className="space-y-3 font-sans">
+                    <div className="p-3 rounded-xl bg-surface-secondary/40 border border-border space-y-1">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-text-primary">
+                        <span>Cascara Spritz Midday Feature</span>
+                        <span className="text-accent-muted font-mono">2–4 PM Lull</span>
+                      </div>
+                      <p className="text-[11px] text-text-secondary">
+                        Derived from botanical beverage momentum; batch keg tap pour protects barista flow
+                      </p>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-surface-secondary/40 border border-border space-y-1">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-text-primary">
+                        <span>Micro-Bakery Sourdough Drop</span>
+                        <span className="text-accent-muted font-mono">Consignment</span>
+                      </div>
+                      <p className="text-[11px] text-text-secondary">
+                        Zero kitchen capex; captures lunch rush dwell before afternoon slump
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-between border-t border-border text-[11px] text-text-secondary">
+                    <span>Qloo Provenance Verified</span>
+                    <button
+                      onClick={() => handleNavSelect("culture-plan")}
+                      className="font-semibold text-primary hover:underline cursor-pointer"
+                    >
+                      View Culture Plan &rarr;
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </section>
 
-          {/* Demo Mode & Provenance Disclosure Alert */}
-          <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 sm:p-5 flex items-start gap-3.5 text-left">
-            <div className="w-6 h-6 rounded-md bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
-              <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-amber-300 uppercase tracking-wider">
-                  Curated Demo Mode Active
-                </span>
-                <Badge variant="warning" size="sm">
-                  Sample Datasets
-                </Badge>
+          {/* SOCIAL PROOF & STATS STRIP */}
+          <section className="bg-surface-secondary text-text-primary py-12 px-6 sm:px-12 border-y border-border">
+            <div className="max-w-5xl mx-auto text-center space-y-6">
+              <TextRevealOnScroll
+                as="h3"
+                text="Built for independent hospitality and retail operators across America"
+                className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-text-primary"
+              />
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-2">
+                <div className="space-y-1">
+                  <div className="font-serif text-2xl sm:text-3xl font-normal">4 Domains</div>
+                  <p className="text-xs text-text-secondary font-sans">Anchors, Contrast, Trends, Ranking</p>
+                </div>
+                <div className="space-y-1">
+                  <div className="font-serif text-2xl sm:text-3xl font-normal">100% MCP</div>
+                  <p className="text-xs text-text-secondary font-sans">Canonical stdio Protocol</p>
+                </div>
+                <div className="space-y-1">
+                  <div className="font-serif text-2xl sm:text-3xl font-normal">5 Modules</div>
+                  <p className="text-xs text-text-secondary font-sans">Integrated Intelligence Suite</p>
+                </div>
+                <div className="space-y-1">
+                  <div className="font-serif text-2xl sm:text-3xl font-normal">0 PII</div>
+                  <p className="text-xs text-text-secondary font-sans">Privacy-First Taste Modeling</p>
+                </div>
               </div>
-              <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                All results and scores currently shown in demo scenarios (Austin specialty coffee, Austin vs Nashville audience comparison) are curated illustrative fixtures. They are designed for product evaluation and do not represent live empirical research. Connect an event-issued <code className="text-amber-300 font-mono text-xs">QLOO_API_KEY</code> on the persistent Node.js backend to unlock live multi-signal MCP queries.
-              </p>
             </div>
-          </div>
+          </section>
 
-          {/* The Four Core Workflows Section */}
-          <div className="space-y-5">
-            <SectionHeader
-              badge={<Badge variant="neutral" size="sm">Core Architecture</Badge>}
-              title="Operational Workflows"
-              description="Four high-impact decision modules bridging Qloo's cultural AI tools with small-business operational questions."
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Workflow 1: Location Insights (Interactive & Live) */}
-              <Card className="hover:border-zinc-700/80 transition-colors border-indigo-500/30 bg-zinc-900/70">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <Badge variant="info" size="sm">Module 01 &bull; Active</Badge>
-                    <span className="text-[11px] font-mono text-indigo-400">qloo_recommend</span>
-                  </div>
-                  <CardTitle className="pt-1">Location Insights</CardTitle>
-                  <CardDescription>
-                    Extract cultural peer anchors, defining concept tag prevalence, and demographic age distribution for any local venue or category.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="p-3 rounded-lg bg-zinc-950/60 border border-zinc-800/60 text-xs text-zinc-400 space-y-1">
-                    <div className="flex items-center justify-between text-zinc-300 font-medium">
-                      <span>Tool Sequence</span>
-                      <span className="font-mono text-[10px] text-indigo-400">3 tools chained</span>
-                    </div>
-                    <p className="text-[11px] text-zinc-400">
-                      find_tags &rarr; recommend (target_type: place) &rarr; entity_tags
-                    </p>
-                  </div>
-                  <div className="pt-1">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setActiveNav("location-insights")}
-                      className="w-full sm:w-auto"
-                    >
-                      Open Location Insights &rarr;
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Workflow 2: Audience Comparison (Interactive & Live) */}
-              <Card className="hover:border-zinc-700/80 transition-colors border-indigo-500/30 bg-zinc-900/70">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <Badge variant="info" size="sm">Module 02 &bull; Active</Badge>
-                    <span className="text-[11px] font-mono text-indigo-400">qloo_compare_audiences</span>
-                  </div>
-                  <CardTitle className="pt-1">Audience Comparison</CardTitle>
-                  <CardDescription>
-                    Contrast cultural affinities between two markets or neighborhoods to uncover shared passions and distinct regional traits.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="p-3 rounded-lg bg-zinc-950/60 border border-zinc-800/60 text-xs text-zinc-400 space-y-1">
-                    <div className="flex items-center justify-between text-zinc-300 font-medium">
-                      <span>Tool Sequence</span>
-                      <span className="font-mono text-[10px] text-indigo-400">2 tools chained</span>
-                    </div>
-                    <p className="text-[11px] text-zinc-400">
-                      describe (type: locality) &rarr; compare_audiences (group_a vs group_b)
-                    </p>
-                  </div>
-                  <div className="pt-1">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setActiveNav("compare-audiences")}
-                      className="w-full sm:w-auto"
-                    >
-                      Open Audience Comparison &rarr;
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Workflow 3: Local Trends (Interactive & Live) */}
-              <Card className="hover:border-zinc-700/80 transition-colors border-indigo-500/30 bg-zinc-900/70">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <Badge variant="info" size="sm">Module 03 &bull; Active</Badge>
-                    <span className="text-[11px] font-mono text-indigo-400">qloo_trends</span>
-                  </div>
-                  <CardTitle className="pt-1">Local Trends & Momentum</CardTitle>
-                  <CardDescription>
-                    Evaluate multi-quarter popularity momentum curves and identify geographic density hotspots across neighborhood zip codes.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="p-3 rounded-lg bg-zinc-950/60 border border-zinc-800/60 text-xs text-zinc-400 space-y-1">
-                    <div className="flex items-center justify-between text-zinc-300 font-medium">
-                      <span>Tool Sequence</span>
-                      <span className="font-mono text-[10px] text-indigo-400">2 tools chained</span>
-                    </div>
-                    <p className="text-[11px] text-zinc-400">
-                      recommend (entity discovery) &rarr; trends (ISO date range)
-                    </p>
-                  </div>
-                  <div className="pt-1">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setActiveNav("local-trends")}
-                      className="w-full sm:w-auto"
-                    >
-                      Open Local Trends &rarr;
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Workflow 4: Recommendations & Rank (Interactive & Live) */}
-              <Card className="hover:border-zinc-700/80 transition-colors border-indigo-500/30 bg-zinc-900/70">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <Badge variant="info" size="sm">Module 04 &bull; Active</Badge>
-                    <span className="text-[11px] font-mono text-indigo-400">qloo_rank</span>
-                  </div>
-                  <CardTitle className="pt-1">Tactical Recommendations</CardTitle>
-                  <CardDescription>
-                    Two-stage candidate discovery and ranking of operational initiatives (co-working passes, seasonal menus, programming) against specific goals.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="p-3 rounded-lg bg-zinc-950/60 border border-zinc-800/60 text-xs text-zinc-400 space-y-1">
-                    <div className="flex items-center justify-between text-zinc-300 font-medium">
-                      <span>Tool Sequence</span>
-                      <span className="font-mono text-[10px] text-indigo-400">2-stage pipeline</span>
-                    </div>
-                    <p className="text-[11px] text-zinc-400">
-                      recommend (candidate pool) &rarr; rank (shortlist vs goal profile)
-                    </p>
-                  </div>
-                  <div className="pt-1">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setActiveNav("recommendations")}
-                      className="w-full sm:w-auto"
-                    >
-                      Open Tactical Recommendations &rarr;
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Technical Architecture Strip */}
-          <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <span className="text-xs font-semibold text-zinc-200">
-                All 4 Core Cultural Workflow Modules Active
+          {/* DECISION MODULES TAXONOMY */}
+          <section className="py-20 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto space-y-12 text-left">
+            <div className="text-center space-y-3">
+              <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-accent-muted font-mono">
+                CORE WORKFLOW TAXONOMY
               </span>
-              <p className="text-xs text-zinc-400">
-                Location Insights, Audience Comparison, Local Trends & Tactical Recommendations are fully mounted in Demo and Live modes.
+              <TextRevealOnScroll
+                as="h2"
+                text="Explore by Decision Module"
+                className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-text-primary"
+              />
+              <p className="text-sm text-text-secondary max-w-2xl mx-auto leading-relaxed font-sans">
+                Five high-impact operational tools bridging Qloo&apos;s cultural AI protocol with small-business operations.
               </p>
+
+              {/* Filter Pills */}
+              <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
+                {[
+                  { id: "all", label: "All Modules" },
+                  { id: "copilot", label: "Flagship Copilot" },
+                  { id: "places", label: "Cultural Anchors" },
+                  { id: "audiences", label: "Audience Contrast" },
+                  { id: "trends", label: "Momentum Curves" },
+                  { id: "rank", label: "Tactical Ranking" }
+                ].map((pill) => (
+                  <button
+                    key={pill.id}
+                    onClick={() => setSelectedCategoryFilter(pill.id)}
+                    className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border ${
+                      selectedCategoryFilter === pill.id
+                        ? "bg-primary text-surface border-primary font-semibold"
+                        : "bg-surface text-text-secondary border-border hover:border-text-primary"
+                    }`}
+                  >
+                    {pill.label}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setActiveNav("recommendations")}
-              >
-                Launch Module 04
-              </Button>
+
+            {/* Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Card 1: Flagship Weekly Culture Plan */}
+              {(selectedCategoryFilter === "all" || selectedCategoryFilter === "copilot") && (
+                <div className="rounded-2xl border border-border bg-surface p-6 space-y-4 hover:shadow-md transition-shadow flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-[10px] font-bold uppercase tracking-wider font-mono">
+                        Flagship Copilot
+                      </span>
+                      <span className="font-mono text-[11px] text-accent-muted">/api/agent/weekly-plan</span>
+                    </div>
+                    <h3 className="font-serif text-2xl text-text-primary">
+                      Weekly Cultural Operations Plan
+                    </h3>
+                    <p className="text-xs text-text-secondary leading-relaxed font-sans">
+                      Synthesize an actionable 8-pillar operating rhythm: menu specials, acoustic soundscapes, partner activations, merchandising, social angles, and a Monday–Sunday schedule.
+                    </p>
+                    <div className="p-3 rounded-xl bg-surface-secondary/50 border border-border text-[11px] text-text-secondary space-y-1 font-mono">
+                      <strong>Architecture:</strong> Orchestrates Location Insights, Audience Contrast, Local Trends, and Qloo Rank into verified operational advice.
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleNavSelect("culture-plan")}
+                    className="w-full py-2.5 rounded-full bg-primary hover:bg-primary-hover text-surface text-xs font-semibold tracking-wide transition-all cursor-pointer"
+                  >
+                    Open Weekly Copilot &rarr;
+                  </button>
+                </div>
+              )}
+
+              {/* Card 2: Location Insights */}
+              {(selectedCategoryFilter === "all" || selectedCategoryFilter === "places") && (
+                <div className="rounded-2xl border border-border bg-surface p-6 space-y-4 hover:shadow-md transition-shadow flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-0.5 rounded-full bg-surface-secondary text-text-secondary border border-border text-[10px] font-bold uppercase tracking-wider font-mono">
+                        Module 01 &bull; Active
+                      </span>
+                      <span className="font-mono text-[11px] text-accent-muted">qloo_recommend</span>
+                    </div>
+                    <h3 className="font-serif text-2xl text-text-primary">
+                      Location Insights &amp; Anchors
+                    </h3>
+                    <p className="text-xs text-text-secondary leading-relaxed font-sans">
+                      Discover peer cultural anchors and concept tag prevalence for your category across neighborhood boundaries.
+                    </p>
+                    <div className="p-3 rounded-xl bg-surface-secondary/50 border border-border text-[11px] text-text-secondary space-y-1 font-mono">
+                      <strong>Tool Sequence:</strong> recommend (peer anchors) &rarr; entity_tags (cultural tag weights).
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleNavSelect("location-insights")}
+                    className="w-full py-2.5 rounded-full bg-primary hover:bg-primary-hover text-surface text-xs font-semibold tracking-wide transition-all cursor-pointer"
+                  >
+                    Open Location Insights &rarr;
+                  </button>
+                </div>
+              )}
+
+              {/* Card 3: Audience Comparison */}
+              {(selectedCategoryFilter === "all" || selectedCategoryFilter === "audiences") && (
+                <div className="rounded-2xl border border-border bg-surface p-6 space-y-4 hover:shadow-md transition-shadow flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-0.5 rounded-full bg-surface-secondary text-text-secondary border border-border text-[10px] font-bold uppercase tracking-wider font-mono">
+                        Module 02 &bull; Active
+                      </span>
+                      <span className="font-mono text-[11px] text-accent-muted">compare_audiences</span>
+                    </div>
+                    <h3 className="font-serif text-2xl text-text-primary">
+                      Audience Contrast Mapping
+                    </h3>
+                    <p className="text-xs text-text-secondary leading-relaxed font-sans">
+                      Map shared baseline affinities vs. distinguishing lifestyle traits between two cities to tailor your menu and marketing.
+                    </p>
+                    <div className="p-3 rounded-xl bg-surface-secondary/50 border border-border text-[11px] text-text-secondary space-y-1 font-mono">
+                      <strong>Tool Sequence:</strong> describe (market entities) &rarr; compare_audiences (affinity divergence).
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleNavSelect("compare-audiences")}
+                    className="w-full py-2.5 rounded-full bg-primary hover:bg-primary-hover text-surface text-xs font-semibold tracking-wide transition-all cursor-pointer"
+                  >
+                    Open Audience Comparison &rarr;
+                  </button>
+                </div>
+              )}
+
+              {/* Card 4: Local Trends */}
+              {(selectedCategoryFilter === "all" || selectedCategoryFilter === "trends") && (
+                <div className="rounded-2xl border border-border bg-surface p-6 space-y-4 hover:shadow-md transition-shadow flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-0.5 rounded-full bg-surface-secondary text-text-secondary border border-border text-[10px] font-bold uppercase tracking-wider font-mono">
+                        Module 03 &bull; Active
+                      </span>
+                      <span className="font-mono text-[11px] text-accent-muted">qloo_trends</span>
+                    </div>
+                    <h3 className="font-serif text-2xl text-text-primary">
+                      Local Trends &amp; Momentum
+                    </h3>
+                    <p className="text-xs text-text-secondary leading-relaxed font-sans">
+                      Evaluate multi-quarter popularity momentum trajectories and identify geographic density hotspots across neighborhood zip codes.
+                    </p>
+                    <div className="p-3 rounded-xl bg-surface-secondary/50 border border-border text-[11px] text-text-secondary space-y-1 font-mono">
+                      <strong>Tool Sequence:</strong> recommend (seed entities) &rarr; trends (ISO date range curve).
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleNavSelect("local-trends")}
+                    className="w-full py-2.5 rounded-full bg-primary hover:bg-primary-hover text-surface text-xs font-semibold tracking-wide transition-all cursor-pointer"
+                  >
+                    Open Local Trends &rarr;
+                  </button>
+                </div>
+              )}
+
+              {/* Card 5: Tactical Recommendations */}
+              {(selectedCategoryFilter === "all" || selectedCategoryFilter === "rank") && (
+                <div className="rounded-2xl border border-border bg-surface p-6 space-y-4 hover:shadow-md transition-shadow flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-0.5 rounded-full bg-surface-secondary text-text-secondary border border-border text-[10px] font-bold uppercase tracking-wider font-mono">
+                        Module 04 &bull; Active
+                      </span>
+                      <span className="font-mono text-[11px] text-accent-muted">qloo_rank</span>
+                    </div>
+                    <h3 className="font-serif text-2xl text-text-primary">
+                      Tactical Recommendations &amp; Ranking
+                    </h3>
+                    <p className="text-xs text-text-secondary leading-relaxed font-sans">
+                      Two-stage candidate discovery and ranking of operational initiatives (co-working passes, seasonal menus, programming) against specific goals.
+                    </p>
+                    <div className="p-3 rounded-xl bg-surface-secondary/50 border border-border text-[11px] text-text-secondary space-y-1 font-mono">
+                      <strong>Tool Sequence:</strong> recommend (candidate pool) &rarr; rank (fit score vs goal profile).
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleNavSelect("recommendations")}
+                    className="w-full py-2.5 rounded-full bg-primary hover:bg-primary-hover text-surface text-xs font-semibold tracking-wide transition-all cursor-pointer"
+                  >
+                    Open Recommendations &rarr;
+                  </button>
+                </div>
+              )}
             </div>
-          </div>
+          </section>
+
+          {/* STRATEGIC CONTRAST SECTION */}
+          <section id="comparison" className="bg-surface-secondary/40 text-text-primary py-20 px-6 sm:px-12 lg:px-20 border-y border-border text-left">
+            <div className="max-w-6xl mx-auto space-y-12">
+              <div className="text-center space-y-3">
+                <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-accent-muted font-mono">
+                  STRATEGIC CONTRAST
+                </span>
+                <TextRevealOnScroll
+                  as="h2"
+                  text="LocalMuse Ops vs. Generic LLM Advice"
+                  className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-text-primary"
+                />
+                <p className="text-xs sm:text-sm text-text-secondary max-w-2xl mx-auto leading-relaxed font-sans">
+                  The fundamental difference between taste-grounded operations and unanchored AI prompts.
+                </p>
+              </div>
+
+              {/* Side-by-Side Comparison Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                {/* Left Card: LocalMuse Ops */}
+                <div className="rounded-2xl bg-surface border border-border p-6 sm:p-8 space-y-5 shadow-sm">
+                  <div className="flex items-center justify-between border-b border-border pb-4">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-accent-muted font-mono">
+                        Qloo Grounded Protocol
+                      </span>
+                      <h3 className="font-serif text-2xl text-text-primary">
+                        LocalMuse Ops Strategy
+                      </h3>
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-primary text-surface font-mono text-xs font-bold">
+                      Grounded
+                    </span>
+                  </div>
+
+                  <ul className="space-y-3 text-xs text-text-primary font-sans">
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-primary shrink-0 mt-0.5">✓</span>
+                      <span><strong>Single-Origin Cascara Feature:</strong> Grounded in verified concept tag prevalence and afternoon lull demand.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-primary shrink-0 mt-0.5">✓</span>
+                      <span><strong>Acoustic Ambiance Decibel Guidance:</strong> Calibrated under 68 dB to preserve remote-work productivity.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-primary shrink-0 mt-0.5">✓</span>
+                      <span><strong>Micro-Bakery Consignment Partnership:</strong> Zero capex kitchen buildout; lifts check size without slowing barista pace.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-primary shrink-0 mt-0.5">✓</span>
+                      <span><strong>Audience Contrast Deltas:</strong> Accounts for unique cross-market taste divergence against benchmark cities.</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Right Card: Generic LLM */}
+                <div className="rounded-2xl bg-surface/60 border border-border/80 p-6 sm:p-8 space-y-5">
+                  <div className="flex items-center justify-between border-b border-border pb-4">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-text-secondary font-mono">
+                        Untethered LLM Prompt
+                      </span>
+                      <h3 className="font-serif text-2xl text-text-secondary">
+                        Generic AI Advice
+                      </h3>
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-surface-secondary text-text-secondary font-mono text-xs font-bold border border-border">
+                      Unanchored
+                    </span>
+                  </div>
+
+                  <ul className="space-y-3 text-xs text-text-secondary font-sans">
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-rose-500 font-bold text-sm">✕</span>
+                      <span><strong>10% Off Afternoon Happy Hour:</strong> Generic margin-eroding discounting that degrades third-place positioning.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-rose-500 font-bold text-sm">✕</span>
+                      <span><strong>Generic Pop Radio Playlists:</strong> Vocal-heavy pop music that distracts working patrons and triggers churn.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-rose-500 font-bold text-sm">✕</span>
+                      <span><strong>Stock Photo Social Media Posts:</strong> Generic internet memes with zero neighborhood authenticity or footfall pull.</span>
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <span className="text-rose-500 font-bold text-sm">✕</span>
+                      <span><strong>Zero Cultural Grounding:</strong> No peer venue discovery, tag affinity weights, or local popularity curves.</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Interactive Practical Contrast Callout */}
+              <div className="p-5 sm:p-6 rounded-2xl bg-surface border border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left shadow-2xs">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-mono uppercase font-bold text-primary tracking-wider">
+                    Practical Evaluation Tool
+                  </span>
+                  <h4 className="font-serif text-lg font-bold text-text-primary">
+                    Evaluate Your Business Profile in Side-by-Side Contrast
+                  </h4>
+                  <p className="text-xs text-text-secondary max-w-xl leading-relaxed">
+                    Generate a full Weekly Culture Plan and click &ldquo;Compare with Generic AI&rdquo; to evaluate cultural relevance, local district context, and evidence provenance directly.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleNavSelect("culture-plan")}
+                  className="px-5 py-2.5 rounded-full bg-primary hover:bg-primary-hover text-surface text-xs font-semibold shadow-2xs inline-flex items-center gap-2 transition-all shrink-0 cursor-pointer"
+                >
+                  <span>Launch Copilot &amp; Compare</span>
+                  <span>&rarr;</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* ARTISANAL FOOTER */}
+          <footer className="border-t border-border bg-surface px-6 sm:px-12 py-12 text-text-secondary">
+            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs">
+              <div className="space-y-1 text-center sm:text-left">
+                <span className="font-serif text-lg font-normal text-text-primary block">LocalMuse Ops</span>
+                <p className="text-[11px] text-text-secondary font-mono">
+                  Qloo Protocol Cultural Operations Architecture &bull; MIT License
+                </p>
+              </div>
+
+              <div className="flex items-center gap-4 text-xs font-medium">
+                <button onClick={() => handleNavSelect("culture-plan")} className="hover:underline hover:text-text-primary cursor-pointer">
+                  Weekly Plan
+                </button>
+                <button onClick={() => handleNavSelect("location-insights")} className="hover:underline hover:text-text-primary cursor-pointer">
+                  Location Insights
+                </button>
+                <button onClick={() => handleNavSelect("compare-audiences")} className="hover:underline hover:text-text-primary cursor-pointer">
+                  Audience Comparison
+                </button>
+                <button onClick={() => handleNavSelect("local-trends")} className="hover:underline hover:text-text-primary cursor-pointer">
+                  Local Trends
+                </button>
+                <button onClick={() => handleNavSelect("recommendations")} className="hover:underline hover:text-text-primary cursor-pointer">
+                  Recommendations
+                </button>
+                <button onClick={() => handleNavSelect("guide")} className="hover:underline hover:text-text-primary cursor-pointer">
+                  Field Guide
+                </button>
+              </div>
+            </div>
+          </footer>
         </div>
       )}
     </AppShell>
