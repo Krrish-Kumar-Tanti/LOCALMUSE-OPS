@@ -15,6 +15,16 @@ export interface McpErrorDetail {
 }
 
 /**
+ * Metadata attached to envelopes for honest attribution and demo tracking.
+ */
+export interface McpMetadata {
+  isDemo?: boolean;
+  source?: string;
+  timestamp?: string;
+  [key: string]: unknown;
+}
+
+/**
  * Standardized Qloo MCP Response Envelope.
  * Preserves the exact structure required by the Qloo Hackathon Kit.
  */
@@ -24,6 +34,7 @@ export interface QlooMcpEnvelope<T = unknown> {
   results: T[];
   result_count: number;
   error?: McpErrorDetail;
+  metadata?: McpMetadata;
   execution?: Record<string, unknown>;
   provenance?: Record<string, unknown>;
 }
