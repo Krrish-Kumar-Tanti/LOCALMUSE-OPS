@@ -43,6 +43,7 @@ function AppShellInner({
     if (id === "overview") router.push("/");
     else if (id === "location-insights") router.push("/location-insights");
     else if (id === "compare-audiences") router.push("/audience-comparison");
+    else if (id === "local-trends") router.push("/local-trends");
   };
 
   return (

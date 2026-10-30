@@ -42,7 +42,7 @@ export const NAV_ITEMS: NavItem[] = [
   {
     id: "local-trends",
     label: "Local Trends",
-    href: "/#local-trends",
+    href: "/local-trends",
     description: "Time-series popularity momentum & neighborhood heatmaps"
   },
   {

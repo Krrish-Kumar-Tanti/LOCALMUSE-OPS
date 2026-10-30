@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { APP_CONFIG } from "@/constants";
 import { LocationInsightsView } from "@/components/location-insights/LocationInsightsView";
 import { AudienceComparisonView } from "@/components/audience-comparison/AudienceComparisonView";
+import { LocalTrendsView } from "@/components/local-trends/LocalTrendsView";
 
 export default function Home() {
   const [activeNav, setActiveNav] = useState("overview");
@@ -20,6 +21,8 @@ export default function Home() {
         return "Location Insights";
       case "compare-audiences":
         return "Audience Comparison";
+      case "local-trends":
+        return "Local Trends & Momentum";
       default:
         return "Cultural Intelligence Workbench";
     }
@@ -31,6 +34,8 @@ export default function Home() {
         return "Taste-powered peer anchors and cultural concept indexing for local enterprises";
       case "compare-audiences":
         return "Cross-market taste contrast, shared passions, and distinguishing lifestyle traits";
+      case "local-trends":
+        return "Time-series popularity momentum curves and neighborhood density heatmaps";
       default:
         return "Taste-powered operations and local market intelligence for independent enterprises";
     }
@@ -47,6 +52,8 @@ export default function Home() {
         <LocationInsightsView />
       ) : activeNav === "compare-audiences" ? (
         <AudienceComparisonView />
+      ) : activeNav === "local-trends" ? (
+        <LocalTrendsView />
       ) : (
         <div className="max-w-6xl mx-auto space-y-8 pb-12">
           {/* Top Hero / Platform Introduction */}
@@ -191,14 +198,14 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              {/* Workflow 3: Local Trends */}
-              <Card className="hover:border-zinc-700/80 transition-colors">
+              {/* Workflow 3: Local Trends (Interactive & Live) */}
+              <Card className="hover:border-zinc-700/80 transition-colors border-indigo-500/30 bg-zinc-900/70">
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <Badge variant="neutral" size="sm">Module 03</Badge>
-                    <span className="text-[11px] font-mono text-zinc-400">qloo_trends</span>
+                    <Badge variant="info" size="sm">Module 03 &bull; Active</Badge>
+                    <span className="text-[11px] font-mono text-indigo-400">qloo_trends</span>
                   </div>
-                  <CardTitle className="pt-1">Local Trends</CardTitle>
+                  <CardTitle className="pt-1">Local Trends & Momentum</CardTitle>
                   <CardDescription>
                     Evaluate multi-quarter popularity momentum curves and identify geographic density hotspots across neighborhood zip codes.
                   </CardDescription>
@@ -212,6 +219,16 @@ export default function Home() {
                     <p className="text-[11px] text-zinc-400">
                       recommend (entity discovery) &rarr; trends (ISO date range)
                     </p>
+                  </div>
+                  <div className="pt-1">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setActiveNav("local-trends")}
+                      className="w-full sm:w-auto"
+                    >
+                      Open Local Trends &rarr;
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
